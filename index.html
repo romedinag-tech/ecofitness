@@ -318,7 +318,7 @@ tbody tr:last-child td{border-bottom:none}
         </div>
       </div>
 
-      <div class="nav-group" id="g-caract">
+      <div class="nav-group adminOnly" id="g-caract">
         <div class="nav-head" onclick="toggleGroup('g-caract')">
           <span class="ico"><span class="nav-ic">📊</span> Caracterización</span>
           <span class="arr">▶</span>
@@ -368,10 +368,10 @@ tbody tr:last-child td{border-bottom:none}
         <h4>📌 ¿Qué puedes hacer aquí?</h4>
         <ul>
           <li><b>Ingreso de Clientes:</b> registra socios nuevos o carga una base histórica desde Excel.</li>
-          <li><b>Caracterización:</b> analiza tu cartera por edad, género y tipo de plan.</li>
-          <li><b>Tasas de Renovación:</b> mide la fidelidad y cuántas veces renuevan tus socios.</li>
-          <li><b>Ingresos:</b> promedio mensual, evolución histórica y medios de pago preferidos.</li>
-          <li><b>Ventas:</b> ventas mensuales segmentadas por tipo de cliente, edad y género.</li>
+          <li class="adminOnly"><b>Caracterización:</b> analiza tu cartera por edad, género y tipo de plan.</li>
+          <li class="adminOnly"><b>Tasas de Renovación:</b> mide la fidelidad y cuántas veces renuevan tus socios.</li>
+          <li class="adminOnly"><b>Ingresos:</b> promedio mensual, evolución histórica y medios de pago preferidos.</li>
+          <li class="adminOnly"><b>Ventas:</b> ventas mensuales segmentadas por tipo de cliente, edad y género.</li>
           <li><b>Vigentes / Por vencer:</b> detecta socios a punto de vencer (≤7 días) para fidelizar.</li>
           <li><b>No renovaron:</b> lista para campañas promocionales de recuperación.</li>
           <li><b>Exportación:</b> descarga toda la base actualizada a Excel cuando lo necesites.</li>
@@ -493,7 +493,7 @@ tbody tr:last-child td{border-bottom:none}
     </div>
 
     <!-- CARACTERIZACION EDAD -->
-    <section class="page" id="p-car-edad">
+    <section class="page adminOnly" id="p-car-edad">
       <div class="page-title">Caracterización por <span class="accent">Edad</span></div>
       <div class="page-desc">Distribución etaria de los <b>socios activos</b>. La edad se
         estima a partir del RUT cuando no está informada (los primeros dígitos del RUT
@@ -511,7 +511,7 @@ tbody tr:last-child td{border-bottom:none}
     </section>
 
     <!-- CARACTERIZACION GENERO -->
-    <section class="page" id="p-car-genero">
+    <section class="page adminOnly" id="p-car-genero">
       <div class="page-title">Caracterización por <span class="accent">Género</span></div>
       <div class="page-desc">Composición de los <b>socios activos</b> por género (estimado
         a partir del nombre de pila cuando no está informado).</div>
@@ -531,7 +531,7 @@ tbody tr:last-child td{border-bottom:none}
     </section>
 
     <!-- CARACTERIZACION PLAN -->
-    <section class="page" id="p-car-plan">
+    <section class="page adminOnly" id="p-car-plan">
       <div class="page-title">Tipo de <span class="accent">Contrato / Plan</span></div>
       <div class="page-desc">Cuántos <b>socios activos</b> hay en cada tipología de contrato
         y su peso relativo.</div>
@@ -921,6 +921,19 @@ function applyRole(){
   const pill=document.getElementById('rolePill');
   pill.textContent = isAdmin?'Administrador':'Operador';
   pill.className = 'role-pill'+(isAdmin?'':' op');
+  // si el operador quedó en una página solo-admin, volver a Inicio
+  if(!isAdmin){
+    const actPage=document.querySelector('.page.active');
+    if(actPage && actPage.classList.contains('adminOnly')){
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.nav-item,.nav-sub a').forEach(n=>n.classList.remove('active'));
+      const home=document.getElementById('p-inicio');
+      if(home) home.classList.add('active');
+      const homeNav=document.querySelector('.nav-item[data-page="inicio"]');
+      if(homeNav) homeNav.classList.add('active');
+      renderPage('inicio');
+    }
+  }
 }
 
 /* ===== NAV ===== */

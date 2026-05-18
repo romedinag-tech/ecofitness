@@ -51,7 +51,7 @@ input,select{font-family:inherit}
 /* ===== LAYOUT ===== */
 #app{display:flex;min-height:100vh}
 #sidebar{width:255px;background:var(--eco-panel);border-right:1px solid var(--eco-border);
-  display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:20}
+  display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;overflow-y:auto;z-index:30}
 .brand{padding:20px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--eco-border)}
 .brand img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--eco-green)}
 .brand .bt{font-size:17.5px;font-weight:700;letter-spacing:.5px}
@@ -62,6 +62,9 @@ input,select{font-family:inherit}
   color:var(--eco-text);font-size:15.0px;font-weight:600;transition:.12s;user-select:none;
   cursor:pointer;-webkit-tap-highlight-color:rgba(122,201,67,.2)}
 .nav-group>.nav-head *{pointer-events:none}
+.nav-item *{pointer-events:none}
+.nav-item{-webkit-tap-highlight-color:rgba(122,201,67,.2)}
+.nav-sub a{-webkit-tap-highlight-color:rgba(122,201,67,.2)}
 .nav-group>.nav-head:hover{background:var(--eco-panel2)}
 .nav-group>.nav-head .ico{display:flex;align-items:center;gap:11px}
 .nav-group>.nav-head .arr{font-size:11.5px;color:var(--eco-muted);transition:.2s}
@@ -69,7 +72,7 @@ input,select{font-family:inherit}
 .nav-sub{max-height:0;overflow:hidden;transition:max-height .25s ease}
 .nav-group.open .nav-sub{max-height:300px}
 .nav-sub a{display:block;padding:10px 18px 10px 46px;color:var(--eco-muted);font-size:14.0px;
-  text-decoration:none;transition:.12s;border-left:3px solid transparent}
+  text-decoration:none;transition:.12s;border-left:3px solid transparent;cursor:pointer}
 .nav-sub a:hover{color:var(--eco-text);background:var(--eco-panel2)}
 .nav-sub a.active{color:var(--eco-green);border-left-color:var(--eco-green);background:var(--eco-panel2)}
 .nav-item{padding:12px 18px;display:flex;align-items:center;gap:11px;color:var(--eco-text);
@@ -187,7 +190,7 @@ tbody tr:last-child td{border-bottom:none}
 .dot{width:10px;height:10px;border-radius:50%}
 
 /* ===== MENU MOVIL ===== */
-#menuBtn{display:none;position:fixed;top:14px;left:14px;z-index:40;
+#menuBtn{display:none;position:fixed;top:14px;left:14px;z-index:24;
   background:var(--eco-green);color:#0d0d0d;border:none;border-radius:10px;
   width:46px;height:46px;font-size:22px;font-weight:700;
   box-shadow:0 4px 14px rgba(0,0,0,.4);cursor:pointer}
@@ -304,41 +307,41 @@ tbody tr:last-child td{border-bottom:none}
       </div>
     </div>
     <nav class="nav">
-      <div class="nav-item active" data-page="inicio" onclick="nav(this)">
+      <div class="nav-item active" data-page="inicio">
         <span class="nav-ic">🏠</span> Inicio</div>
 
       <div class="nav-group open" id="g-ingreso">
-        <div class="nav-head" onclick="toggleGroup('g-ingreso')">
+        <div class="nav-head">
           <span class="ico"><span class="nav-ic">➕</span> Ingreso de Clientes</span>
           <span class="arr">▶</span>
         </div>
         <div class="nav-sub">
-          <a data-page="cli-nuevo" onclick="nav(this)">Cliente nuevo</a>
-          <a data-page="cli-historico" onclick="nav(this)">Base de datos histórica</a>
+          <a data-page="cli-nuevo">Cliente nuevo</a>
+          <a data-page="cli-historico">Base de datos histórica</a>
         </div>
       </div>
 
       <div class="nav-group adminOnly" id="g-caract">
-        <div class="nav-head" onclick="toggleGroup('g-caract')">
+        <div class="nav-head">
           <span class="ico"><span class="nav-ic">📊</span> Caracterización</span>
           <span class="arr">▶</span>
         </div>
         <div class="nav-sub">
-          <a data-page="car-edad" onclick="nav(this)">Análisis por edad</a>
-          <a data-page="car-genero" onclick="nav(this)">Análisis por género</a>
-          <a data-page="car-plan" onclick="nav(this)">Tipo de contrato / plan</a>
+          <a data-page="car-edad">Análisis por edad</a>
+          <a data-page="car-genero">Análisis por género</a>
+          <a data-page="car-plan">Tipo de contrato / plan</a>
         </div>
       </div>
 
-      <div class="nav-item adminOnly" data-page="renovacion" onclick="nav(this)">
+      <div class="nav-item adminOnly" data-page="renovacion">
         <span class="nav-ic">🔄</span> Tasas de Renovación</div>
-      <div class="nav-item adminOnly" data-page="ingresos" onclick="nav(this)">
+      <div class="nav-item adminOnly" data-page="ingresos">
         <span class="nav-ic">💰</span> Ingresos</div>
-      <div class="nav-item adminOnly" data-page="ventas" onclick="nav(this)">
+      <div class="nav-item adminOnly" data-page="ventas">
         <span class="nav-ic">🛒</span> Ventas</div>
-      <div class="nav-item" data-page="vigentes" onclick="nav(this)">
+      <div class="nav-item" data-page="vigentes">
         <span class="nav-ic">⏰</span> Vigentes / Por vencer</div>
-      <div class="nav-item" data-page="campanas" onclick="nav(this)">
+      <div class="nav-item" data-page="campanas">
         <span class="nav-ic">📣</span> No renovaron (Campañas)</div>
     </nav>
     <div class="side-foot">
@@ -1672,8 +1675,38 @@ function exportCampanas(){
 }
 
 /* ===== INIT ===== */
+function setupNavDelegation(){
+  const navEl=document.querySelector('nav.nav');
+  if(!navEl || navEl.dataset.delegated) return;
+  navEl.dataset.delegated='1';
+  let lastTouch=0;
+  const handler=function(ev){
+    // evitar doble disparo (touchend seguido de click sintético)
+    if(ev.type==='click' && Date.now()-lastTouch<600){ return; }
+    if(ev.type==='touchend'){ lastTouch=Date.now(); }
+    const start=ev.target;
+    if(!start || !start.closest) return;
+    // 1) enlace de submenú
+    const subLink=start.closest('.nav-sub a');
+    if(subLink && navEl.contains(subLink)){ ev.preventDefault(); nav(subLink); return; }
+    // 2) cabecera de grupo desplegable
+    const head=start.closest('.nav-head');
+    if(head && navEl.contains(head)){
+      const grp=head.closest('.nav-group');
+      if(grp && grp.id){ ev.preventDefault(); toggleGroup(grp.id); return; }
+    }
+    // 3) ítem simple del menú
+    const item=start.closest('.nav-item');
+    if(item && navEl.contains(item) && item.dataset && item.dataset.page){
+      ev.preventDefault(); nav(item); return;
+    }
+  };
+  navEl.addEventListener('click',handler);
+  navEl.addEventListener('touchend',handler,{passive:false});
+}
 function initApp(){
   loadDB(); updateCounters(); renderInicio(); refreshBackupState();
+  setupNavDelegation();
 }
 loadDB();
 </script>

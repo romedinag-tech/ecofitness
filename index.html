@@ -159,9 +159,13 @@ input,select{font-family:inherit}
 
 /* table */
 .tbl-wrap{overflow-x:auto;border:1px solid var(--eco-border);border-radius:11px}
+/* Histórica: scroll vertical interno para que el sticky funcione */
+#histTable{position:relative}
+.tbl-wrap.tbl-hist{max-height:65vh;overflow-y:auto}
 table{width:100%;border-collapse:collapse;font-size:14.0px}
 thead th{background:var(--eco-panel2);padding:11px 13px;text-align:left;color:var(--eco-muted);
-  font-weight:600;white-space:nowrap;position:sticky;top:0;border-bottom:1px solid var(--eco-border)}
+  font-weight:600;white-space:nowrap;position:sticky;top:0;border-bottom:1px solid var(--eco-border);z-index:5}
+.tbl-wrap.tbl-hist thead th{box-shadow:0 2px 0 0 var(--eco-border)}
 tbody td{padding:10px 13px;border-bottom:1px solid var(--eco-border);white-space:nowrap}
 tbody tr:hover{background:var(--eco-panel2)}
 tbody tr:last-child td{border-bottom:none}
@@ -169,7 +173,67 @@ tbody tr:last-child td{border-bottom:none}
 .b-act{background:rgba(122,201,67,.16);color:var(--eco-green)}
 .b-ven{background:rgba(230,88,77,.16);color:var(--bad)}
 .b-warn{background:rgba(245,166,35,.16);color:var(--warn)}
+.b-anu{background:rgba(154,154,154,.18);color:#bbb}
+.b-con{background:rgba(74,163,223,.18);color:var(--info)}
+.b-blo{background:rgba(230,88,77,.28);color:#ff7a6f;border:1px solid rgba(230,88,77,.4)}
 .b-info{background:rgba(74,163,223,.16);color:var(--info)}
+
+/* ===== FILTROS TIPO EXCEL POR COLUMNA ===== */
+.col-flt{display:inline-block;margin-left:5px;padding:0 5px;font-size:11px;cursor:pointer;
+  color:var(--eco-muted);user-select:none;border-radius:3px;transition:.15s}
+.col-flt:hover{background:rgba(122,201,67,.15);color:var(--eco-green)}
+.col-flt.active{color:var(--eco-green);background:rgba(122,201,67,.18);font-weight:700}
+
+.col-flt-bar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px 0;min-height:0}
+.col-flt-bar:empty{display:none}
+.col-flt-bar .cfb-pill{background:rgba(122,201,67,.14);color:var(--eco-green);
+  border:1px solid rgba(122,201,67,.3);padding:3px 9px;border-radius:14px;font-size:12px;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.col-flt-bar .cfb-pill:hover{background:rgba(122,201,67,.22)}
+.col-flt-bar .cfb-pill .x{font-weight:700;opacity:.7}
+.col-flt-bar .cfb-clear-all{background:rgba(230,88,77,.12);color:var(--bad);
+  border:1px solid rgba(230,88,77,.3);padding:3px 9px;border-radius:14px;font-size:12px;cursor:pointer}
+
+.col-flt-popup{display:none;position:absolute;z-index:120;background:var(--eco-panel);
+  border:1px solid var(--eco-border);border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,.6);
+  width:280px;max-width:92vw;padding:12px}
+.col-flt-popup.show{display:block}
+.cfp-head{display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid var(--eco-border);padding-bottom:8px;margin-bottom:10px}
+.cfp-title{font-size:13px;color:var(--eco-muted)}
+.cfp-title b{color:var(--eco-text);font-weight:600}
+.cfp-close{background:none;border:none;color:var(--eco-muted);font-size:15px;cursor:pointer;padding:2px 6px}
+.cfp-close:hover{color:var(--bad)}
+.cfp-sort{display:flex;gap:6px;margin-bottom:10px}
+.cfp-sort button{flex:1;background:var(--eco-panel2);border:1px solid var(--eco-border);
+  color:var(--eco-text);padding:7px;border-radius:6px;font-size:12.5px;cursor:pointer}
+.cfp-sort button:hover{background:rgba(122,201,67,.13);border-color:var(--eco-green)}
+.cfp-section{font-size:11.5px;color:var(--eco-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.cfp-date-quick{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--eco-border)}
+.cfp-date-btns{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.cfp-date-btns button{background:var(--eco-panel2);border:1px solid var(--eco-border);color:var(--eco-text);
+  padding:5px 9px;border-radius:5px;font-size:11.5px;cursor:pointer}
+.cfp-date-btns button:hover{background:rgba(122,201,67,.13);border-color:var(--eco-green)}
+.cfp-date-range{display:flex;gap:6px}
+.cfp-date-range label{flex:1;font-size:11.5px;color:var(--eco-muted)}
+.cfp-date-range input{width:100%;background:var(--eco-panel2);border:1px solid var(--eco-border);
+  color:var(--eco-text);padding:5px;border-radius:5px;font-size:12px;margin-top:2px}
+.cfp-search input{width:100%;background:var(--eco-panel2);border:1px solid var(--eco-border);
+  color:var(--eco-text);padding:7px 10px;border-radius:6px;font-size:12.5px;margin-bottom:8px;outline:none}
+.cfp-search input:focus{border-color:var(--eco-green)}
+.cfp-values{max-height:200px;overflow-y:auto;border:1px solid var(--eco-border);border-radius:6px;
+  padding:5px;margin-bottom:10px;background:var(--eco-panel2)}
+.cfp-row{display:flex;align-items:center;gap:6px;padding:4px 6px;font-size:12.5px;cursor:pointer;
+  border-radius:4px}
+.cfp-row:hover{background:rgba(255,255,255,.04)}
+.cfp-row input[type=checkbox]{cursor:pointer}
+.cfp-row.cfp-all{font-weight:600;border-bottom:1px solid var(--eco-border);margin-bottom:3px;padding-bottom:6px}
+.cfp-actions{display:flex;gap:6px;justify-content:flex-end}
+.cfp-actions button{padding:7px 13px;border-radius:6px;border:1px solid var(--eco-border);
+  background:var(--eco-panel2);color:var(--eco-text);font-size:12.5px;cursor:pointer}
+.cfp-clear{color:var(--bad)!important;border-color:rgba(230,88,77,.3)!important}
+.cfp-apply{background:var(--eco-green)!important;color:#0d0d0d!important;border-color:var(--eco-green)!important;font-weight:700}
+.cfp-empty{color:var(--eco-muted);text-align:center;padding:14px;font-size:12.5px}
 .toolbar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 .toolbar input,.toolbar select{padding:9px 13px;background:var(--eco-panel);border:1px solid var(--eco-border);
   border-radius:8px;color:var(--eco-text);font-size:14.5px;outline:none}
@@ -269,6 +333,116 @@ tbody tr:last-child td{border-bottom:none}
   .chart-box{height:225px}
   .welcome h2{font-size:18px}
 }
+
+/* ============================================================
+   ===== MÓDULO HUELLERO (DigitalPersona 4500) ================
+   ============================================================ */
+
+/* Pantalla de captura/registro de huella (modal) */
+#fpModal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;
+  display:none;align-items:center;justify-content:center;padding:20px}
+#fpModal.show{display:flex}
+.fp-card{background:var(--eco-panel);border:1px solid var(--eco-border);border-radius:18px;
+  width:480px;max-width:95vw;padding:32px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.fp-card h2{font-size:21px;margin-bottom:6px}
+.fp-card h2 b{color:var(--eco-green)}
+.fp-sub{color:var(--eco-muted);font-size:14px;margin-bottom:22px}
+.fp-icon{width:120px;height:120px;border-radius:50%;margin:0 auto 18px;
+  display:flex;align-items:center;justify-content:center;font-size:64px;
+  background:var(--eco-panel2);border:3px solid var(--eco-border);
+  transition:all .25s;color:var(--eco-muted)}
+.fp-icon.waiting{border-color:var(--info);color:var(--info);animation:fpPulse 1.4s infinite}
+.fp-icon.ok{border-color:var(--ok);color:var(--ok)}
+.fp-icon.err{border-color:var(--bad);color:var(--bad)}
+@keyframes fpPulse{0%{box-shadow:0 0 0 0 rgba(74,163,223,.5)}
+  70%{box-shadow:0 0 0 22px rgba(74,163,223,0)}
+  100%{box-shadow:0 0 0 0 rgba(74,163,223,0)}}
+.fp-status{font-size:16px;margin-bottom:18px;min-height:24px}
+.fp-status.ok{color:var(--ok)}
+.fp-status.err{color:var(--bad)}
+.fp-status.info{color:var(--info)}
+.fp-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.fp-actions button{padding:11px 18px;border-radius:9px;border:1px solid var(--eco-border);
+  background:var(--eco-panel2);color:var(--eco-text);font-size:14.5px}
+.fp-actions button.primary{background:var(--eco-green);color:#0d0d0d;border-color:var(--eco-green);font-weight:700}
+.fp-actions button.danger{color:var(--bad);border-color:rgba(230,88,77,.3)}
+.fp-mini-form{background:var(--eco-panel2);border-radius:10px;padding:14px;margin-top:14px;
+  text-align:left;font-size:13.5px;color:var(--eco-muted);display:none}
+.fp-mini-form.show{display:block}
+.fp-mini-form b{color:var(--eco-text)}
+
+/* Indicador en el formulario de cliente */
+.fp-fld{grid-column:1/-1;background:var(--eco-panel2);border:1px dashed var(--eco-border);
+  border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.fp-fld .fp-state{flex:1;min-width:200px}
+.fp-fld .fp-state .lbl{font-size:13.5px;color:var(--eco-muted);margin-bottom:3px}
+.fp-fld .fp-state .val{font-weight:600}
+.fp-fld .fp-state .val.has{color:var(--ok)}
+.fp-fld .fp-state .val.none{color:var(--warn)}
+.fp-fld button{padding:9px 14px;border-radius:8px;background:var(--eco-panel);
+  border:1px solid var(--eco-border);color:var(--eco-text);font-size:13.5px}
+.fp-fld button.primary{background:var(--eco-green);color:#0d0d0d;border-color:var(--eco-green);font-weight:700}
+
+/* ===== PANTALLA KIOSKO (CLIENTE) ===== */
+body.kiosk-mode #app{display:block}
+body.kiosk-mode #sidebar,
+body.kiosk-mode #topbar,
+body.kiosk-mode .page,
+body.kiosk-mode #loginScreen{display:none!important}
+body.kiosk-mode #kiosko{display:flex!important}
+#kiosko{display:none;position:fixed;inset:0;background:#0d0d0d;
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:40px;text-align:center;z-index:50;overflow:hidden}
+#kiosko .k-brand{position:absolute;top:30px;left:0;right:0;font-size:22px;letter-spacing:2px;color:var(--eco-muted)}
+#kiosko .k-brand b{color:var(--eco-green)}
+#kiosko .k-clock{position:absolute;top:30px;right:40px;font-size:18px;color:var(--eco-muted)}
+#kiosko .k-back{position:absolute;bottom:20px;left:20px;font-size:12px;color:#444;background:none;border:none}
+.k-state{transition:all .35s;width:100%;max-width:900px}
+.k-icon{font-size:180px;line-height:1;margin-bottom:30px;display:block}
+.k-title{font-size:64px;font-weight:800;letter-spacing:1px;margin-bottom:14px;line-height:1.1}
+.k-name{font-size:48px;margin-bottom:18px;color:var(--eco-text)}
+.k-msg{font-size:26px;color:var(--eco-muted);margin-bottom:10px}
+.k-plan{font-size:22px;color:var(--eco-muted);margin-top:24px}
+.k-plan b{color:var(--eco-text)}
+
+#kiosko.state-idle .k-icon{color:var(--info);animation:fpPulse 2s infinite}
+#kiosko.state-idle .k-title{color:var(--info)}
+#kiosko.state-ok{background:linear-gradient(135deg,#0d2010 0%,#0d0d0d 60%)}
+#kiosko.state-ok .k-icon{color:var(--ok)}
+#kiosko.state-ok .k-title{color:var(--ok)}
+#kiosko.state-out{background:linear-gradient(135deg,#0d2010 0%,#0d0d0d 60%)}
+#kiosko.state-out .k-icon{color:var(--info)}
+#kiosko.state-out .k-title{color:var(--info)}
+#kiosko.state-bad{background:linear-gradient(135deg,#2a0e0c 0%,#0d0d0d 60%)}
+#kiosko.state-bad .k-icon{color:var(--bad)}
+#kiosko.state-bad .k-title{color:var(--bad)}
+#kiosko.state-unknown{background:linear-gradient(135deg,#2a200c 0%,#0d0d0d 60%)}
+#kiosko.state-unknown .k-icon{color:var(--warn)}
+#kiosko.state-unknown .k-title{color:var(--warn)}
+
+/* ===== PANEL "EN EL GIMNASIO AHORA" ===== */
+.gym-now-head{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.gym-now-big{background:var(--eco-panel);border:1px solid var(--eco-border);border-radius:14px;
+  padding:18px 26px;min-width:220px}
+.gym-now-big .num{font-size:46px;font-weight:800;color:var(--eco-green);line-height:1}
+.gym-now-big .lbl{color:var(--eco-muted);font-size:13.5px;margin-top:4px}
+.gym-now-big.warn .num{color:var(--bad)}
+.gym-now-big.info .num{color:var(--info)}
+.gym-now-table table{width:100%;border-collapse:collapse}
+.gym-now-table th,.gym-now-table td{padding:10px 12px;border-bottom:1px solid var(--eco-border);text-align:left;font-size:14px}
+.gym-now-table th{color:var(--eco-muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.5px}
+.gym-now-table tr.warn-row td{background:rgba(230,88,77,.08)}
+.gym-now-table .badge{display:inline-block;padding:3px 9px;border-radius:6px;font-size:11.5px;font-weight:600}
+.gym-now-table .badge.ok{background:rgba(122,201,67,.18);color:var(--ok)}
+.gym-now-table .badge.bad{background:rgba(230,88,77,.22);color:var(--bad)}
+.gym-now-empty{text-align:center;padding:50px 20px;color:var(--eco-muted)}
+.gym-now-empty .ico{font-size:60px;display:block;margin-bottom:14px;opacity:.4}
+.fp-status-pill{display:inline-block;padding:4px 11px;border-radius:14px;font-size:12px;
+  background:var(--eco-panel2);border:1px solid var(--eco-border);color:var(--eco-muted)}
+.fp-status-pill.ok{background:rgba(122,201,67,.15);color:var(--ok);border-color:rgba(122,201,67,.3)}
+.fp-status-pill.err{background:rgba(230,88,77,.15);color:var(--bad);border-color:rgba(230,88,77,.3)}
+.fp-status-pill.sim{background:rgba(245,166,35,.15);color:var(--warn);border-color:rgba(245,166,35,.3)}
+
 </style>
 </head>
 <body>
@@ -343,6 +517,18 @@ tbody tr:last-child td{border-bottom:none}
         <span class="nav-ic">⏰</span> Vigentes / Por vencer</div>
       <div class="nav-item" data-page="campanas">
         <span class="nav-ic">📣</span> No renovaron (Campañas)</div>
+
+      <div class="nav-group open" id="g-acceso" style="margin-top:8px;border-top:1px solid var(--eco-border);padding-top:8px">
+        <div class="nav-head">
+          <span class="ico"><span class="nav-ic">👆</span> Control de Acceso</span>
+          <span class="arr">▶</span>
+        </div>
+        <div class="nav-sub">
+          <a data-page="en-gimnasio">🟢 En el gimnasio ahora</a>
+          <a onclick="abrirKiosko();return false;" style="cursor:pointer">🖥️ Abrir pantalla acceso</a>
+          <a data-page="hist-accesos">📋 Historial de accesos</a>
+        </div>
+      </div>
     </nav>
     <div class="side-foot">
       Sesión: <span class="role-pill" id="rolePill">Admin</span><br>
@@ -392,6 +578,17 @@ tbody tr:last-child td{border-bottom:none}
       <div class="panel">
         <h3><span class="bar"></span>Ficha del cliente</h3>
         <div class="form-grid" id="formNuevo">
+          <div class="fp-fld">
+            <span style="font-size:28px">👆</span>
+            <div class="fp-state">
+              <div class="lbl">Huella dactilar registrada</div>
+              <div class="val none" id="fpFormState">— No registrada</div>
+            </div>
+            <button type="button" onclick="fpBuscarPorHuella()">🔍 Buscar por huella</button>
+            <button type="button" class="primary" onclick="fpCapturarParaForm()">📷 Capturar huella</button>
+            <button type="button" onclick="fpLimpiarForm()" id="fpFormClearBtn" style="display:none">✕ Quitar</button>
+            <input type="hidden" id="f_huella" value="">
+          </div>
           <div class="fld"><label>RUT <span class="req">*</span></label>
             <input id="f_rut" placeholder="12345678-9" oninput="onRutInput()">
             <span class="hint">Formato: sin puntos, con guión y dígito verificador</span></div>
@@ -432,6 +629,12 @@ tbody tr:last-child td{border-bottom:none}
             <input id="f_recibo" placeholder="opcional"></div>
           <div class="fld"><label>Condición</label>
             <input id="f_cond" value="-" placeholder="-"></div>
+          <div class="fld" style="grid-column:1/-1">
+            <label>Comentario / Nota interna <span class="hint" style="color:var(--eco-muted);font-weight:400">(opcional, solo visible para administradores)</span></label>
+            <textarea id="f_comentario" rows="3" placeholder="Cualquier recordatorio, observación o información útil sobre este socio..."
+              style="width:100%;padding:10px 12px;background:var(--eco-panel2);border:1px solid var(--eco-border);
+                     border-radius:8px;color:var(--eco-text);font-family:inherit;font-size:14.5px;resize:vertical;outline:none"></textarea>
+          </div>
         </div>
         <div class="form-actions">
           <button class="btn btn-primary" onclick="guardarNuevo()">💾 Guardar cliente</button>
@@ -463,7 +666,8 @@ tbody tr:last-child td{border-bottom:none}
           <input id="histSearch" placeholder="🔍 Buscar nombre / RUT..." oninput="renderHistTable()">
           <select id="histPlan" onchange="renderHistTable()"><option value="">Todos los planes</option></select>
           <select id="histEstado" onchange="renderHistTable()"><option value="">Todos los estados</option>
-            <option>ACTIVO</option><option>VENCIDO</option></select>
+            <option>ACTIVO</option><option>VENCIDO</option>
+            <option>ANULADO</option><option>CONGELADO</option><option>BLOQUEADO</option></select>
           <select id="histDatos" onchange="renderHistTable()">
             <option value="">Todos los registros</option>
             <option value="incompletos">⚠ Solo con datos faltantes</option>
@@ -472,13 +676,64 @@ tbody tr:last-child td{border-bottom:none}
           <span class="muted-s" id="histCount"></span>
           <button class="btn btn-primary btn-sm" onclick="exportXlsx()">⬇ Exportar Excel</button>
         </div>
-        <div class="tbl-wrap"><table id="histTable">
-          <thead><tr><th>#</th><th>Nombre</th><th>RUT</th><th>Género</th><th>Edad</th>
-            <th>Plan</th><th>Tipo</th><th>Inicio</th><th>Término</th><th>Estado</th>
-            <th>Valor</th><th>Pago</th><th>Faltan</th><th></th></tr></thead>
+        <div id="colFiltersBar" class="col-flt-bar"></div>
+        <div class="tbl-wrap tbl-hist"><table id="histTable">
+          <thead><tr>
+            <th>#</th>
+            <th data-col="nombre" data-type="text">Nombre<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="rut" data-type="text">RUT<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="genero" data-type="text">Género<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="edad" data-type="num">Edad<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="planN" data-type="text">Plan<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="tipoCliente" data-type="text">Tipo<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="fechaInicioOk" data-type="date">Inicio<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="fechaTerminoOk" data-type="date">Término<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="estadoCalc" data-type="text">Estado<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="valor" data-type="num">Valor<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th data-col="pagoN" data-type="text">Pago<span class="col-flt" onclick="abrirFiltroColumna(this,event)">▾</span></th>
+            <th>Faltan</th>
+            <th></th>
+          </tr></thead>
           <tbody></tbody></table></div>
       </div>
     </section>
+
+    <!-- POPUP DE FILTROS DE COLUMNA -->
+    <div id="colFiltPopup" class="col-flt-popup">
+      <div class="cfp-head">
+        <div class="cfp-title">Filtrar columna: <b id="cfpColLabel">—</b></div>
+        <button class="cfp-close" onclick="cerrarFiltroColumna()" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="cfp-sort">
+        <button onclick="ordenarColumna('asc')">↑ Ordenar A → Z</button>
+        <button onclick="ordenarColumna('desc')">↓ Ordenar Z → A</button>
+      </div>
+      <div class="cfp-date-quick" id="cfpDateQuick" style="display:none">
+        <div class="cfp-section">Rangos rápidos:</div>
+        <div class="cfp-date-btns">
+          <button onclick="aplicarRangoFecha('hoy')">Hoy</button>
+          <button onclick="aplicarRangoFecha('semana')">Esta semana</button>
+          <button onclick="aplicarRangoFecha('mes')">Este mes</button>
+          <button onclick="aplicarRangoFecha('mes-pasado')">Mes pasado</button>
+          <button onclick="aplicarRangoFecha('anio')">Este año</button>
+        </div>
+        <div class="cfp-date-range">
+          <label>Desde <input type="date" id="cfpDateFrom"></label>
+          <label>Hasta <input type="date" id="cfpDateTo"></label>
+        </div>
+      </div>
+      <div class="cfp-search">
+        <input type="text" id="cfpSearch" placeholder="🔍 Buscar valor..." oninput="filtrarListaValores()">
+      </div>
+      <div class="cfp-values" id="cfpValues">
+        <label class="cfp-row cfp-all"><input type="checkbox" id="cfpAll" checked onchange="toggleAllValores(this.checked)"> (Seleccionar todo)</label>
+        <div id="cfpList"></div>
+      </div>
+      <div class="cfp-actions">
+        <button class="cfp-clear" onclick="limpiarFiltroColumna()">Limpiar filtro</button>
+        <button class="cfp-apply" onclick="aplicarFiltroColumna()">Aplicar</button>
+      </div>
+    </div>
 
     <!-- MODAL EDICION -->
     <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
@@ -659,6 +914,105 @@ tbody tr:last-child td{border-bottom:none}
     </section>
 
   </main>
+
+  <!-- =================================================================
+       =====   PÁGINAS NUEVAS DE CONTROL DE ACCESO (DENTRO DE MAIN) =====
+       NOTA: aunque estén fuera de <main> aquí, el JS las gestiona igual.
+       Las muevo dentro del main mediante JS al cargar.
+       ================================================================= -->
+  <div id="pages-acceso-host" style="display:none">
+    <section class="page" id="p-en-gimnasio">
+      <div class="page-title">En el <span class="accent">Gimnasio Ahora</span>
+        <span id="fpConnPill" class="fp-status-pill" style="margin-left:14px;font-size:13px">Huellero: comprobando...</span>
+      </div>
+      <div class="page-desc">Personas que marcaron entrada hoy y aún no han marcado salida.
+        El listado se reinicia automáticamente a medianoche. Las marcas se sincronizan
+        en tiempo real con la pantalla del kiosko.</div>
+      <div class="gym-now-head">
+        <div class="gym-now-big"><div class="num" id="gnTotal">0</div><div class="lbl">Personas dentro</div></div>
+        <div class="gym-now-big warn"><div class="num" id="gnWarn">0</div><div class="lbl">Sin plan activo ⚠</div></div>
+        <div class="gym-now-big info"><div class="num" id="gnAvg">—</div><div class="lbl">Permanencia promedio (hoy)</div></div>
+        <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="abrirKiosko()">🖥️ Abrir pantalla acceso</button>
+          <button class="btn btn-ghost" onclick="renderEnGimnasio()">↻ Actualizar</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3><span class="bar"></span>Listado en vivo</h3>
+        <div class="gym-now-table" id="gnTablaHost">
+          <div class="gym-now-empty" id="gnVacio">
+            <span class="ico">🏋️</span>
+            Nadie ha marcado entrada hoy todavía.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="p-hist-accesos">
+      <div class="page-title">Historial de <span class="accent">Accesos</span></div>
+      <div class="page-desc">Registro de marcas de entrada/salida. Útil para auditoría
+        y para calcular permanencia. Se guarda en el navegador y puedes exportarlo a Excel.</div>
+      <div class="panel">
+        <h3><span class="bar"></span>Filtros</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+          <div class="fld" style="max-width:200px">
+            <label>Desde</label>
+            <input type="date" id="haDesde" onchange="renderHistAccesos()">
+          </div>
+          <div class="fld" style="max-width:200px">
+            <label>Hasta</label>
+            <input type="date" id="haHasta" onchange="renderHistAccesos()">
+          </div>
+          <div class="fld" style="max-width:240px">
+            <label>Buscar nombre/RUT</label>
+            <input id="haQ" oninput="renderHistAccesos()" placeholder="opcional">
+          </div>
+          <button class="btn btn-primary" onclick="exportarHistAccesos()">📥 Exportar Excel</button>
+          <button class="btn btn-ghost" style="color:var(--bad);border-color:rgba(230,88,77,.3)"
+            onclick="limpiarHistAccesos()">🗑 Limpiar historial</button>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:14px">
+        <h3><span class="bar"></span>Marcas</h3>
+        <div class="gym-now-table" id="haTablaHost"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===== MODAL DE CAPTURA / VERIFICACIÓN DE HUELLA ===== -->
+  <div id="fpModal" onclick="if(event.target===this)fpCerrarModal()">
+    <div class="fp-card">
+      <h2 id="fpModalTitle">Capturar <b>Huella</b></h2>
+      <div class="fp-sub" id="fpModalSub">Coloque el dedo sobre el lector DigitalPersona</div>
+      <div class="fp-icon waiting" id="fpModalIcon">👆</div>
+      <div class="fp-status info" id="fpModalStatus">Esperando huella...</div>
+      <div class="fp-mini-form" id="fpFoundCard">
+        <div style="font-size:15px;margin-bottom:6px"><b id="fpFoundName">—</b></div>
+        <div>RUT: <b id="fpFoundRut">—</b></div>
+        <div>Plan: <b id="fpFoundPlan">—</b> · Estado: <b id="fpFoundEstado">—</b></div>
+        <div>Vence: <b id="fpFoundVence">—</b></div>
+      </div>
+      <div class="fp-actions" id="fpActions">
+        <button onclick="fpCerrarModal()">Cancelar</button>
+        <button class="primary" id="fpBtnSimular" onclick="fpSimularCaptura()" style="display:none">🎲 Simular captura</button>
+        <button class="primary" id="fpBtnConfirmar" onclick="fpConfirmarAccion()" style="display:none">✓ Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PANTALLA KIOSKO (CLIENTE) ===== -->
+  <div id="kiosko" class="state-idle">
+    <div class="k-brand">ECO<b>FITNESS</b></div>
+    <div class="k-clock" id="kClock">--:--</div>
+    <div class="k-state" id="kState">
+      <span class="k-icon" id="kIcon">👆</span>
+      <div class="k-title" id="kTitle">APOYE SU HUELLA</div>
+      <div class="k-name" id="kName"></div>
+      <div class="k-msg" id="kMsg">Sistema listo · Coloque su dedo en el lector</div>
+      <div class="k-plan" id="kPlan"></div>
+    </div>
+    <button class="k-back" onclick="window.close()">cerrar ventana</button>
+  </div>
 </div>
 
 <script>
@@ -778,13 +1132,17 @@ function hydrate(rec){
   rec.rangoEdad = rangoEdad(rec.edad);
   rec.fechaTerminoOk = sanearFecha(rec.fechaTermino);
   rec.fechaInicioOk = sanearFecha(rec.fechaInicio);
-  // estado: usar el de la planilla; si hay fecha válida de término, recalcular
-  if(rec.fechaTerminoOk){
+  // estado: si fue marcado manualmente como ANULADO/CONGELADO/BLOQUEADO, respetar.
+  // Si no, recalcular por fecha de término.
+  const eRaw = (rec.estado||'').toString().toUpperCase();
+  const MANUAL = ['ANULADO','CONGELADO','BLOQUEADO'];
+  if(MANUAL.includes(eRaw)){
+    rec.estadoCalc = eRaw;
+  } else if(rec.fechaTerminoOk){
     const ft=new Date(rec.fechaTerminoOk);
     rec.estadoCalc = (ft>=new Date())?'ACTIVO':'VENCIDO';
   } else {
-    const e=(rec.estado||'').toString().toUpperCase();
-    rec.estadoCalc = e.includes('ACTIV')?'ACTIVO':(e.includes('VENC')?'VENCIDO':(rec.estado||''));
+    rec.estadoCalc = eRaw.includes('ACTIV')?'ACTIVO':(eRaw.includes('VENC')?'VENCIDO':(rec.estado||''));
   }
   // detectar campos faltantes para el filtro de "datos incompletos"
   const falt=[];
@@ -817,7 +1175,8 @@ function serializeDB(){
   return DB.map(r=>{
     const o={}; ['id','rut','nombre','fechaRegistro','plan','condicion','tipoCliente',
     'fechaInicio','fechaTermino','estado','recibo','valor','tipoPago','genero','edad',
-    'telefono','email','direccion'].forEach(k=>o[k]=r[k]); return o;
+    'telefono','email','direccion','huella','comentario',
+    'motivoEstado','fechaEstado'].forEach(k=>o[k]=r[k]); return o;
   });
 }
 function persist(){
@@ -995,12 +1354,13 @@ function autoFin(){
   document.getElementById('f_ffin').value=d.toISOString().slice(0,10);
 }
 function limpiarForm(){
-  ['f_rut','f_nombre','f_edad','f_id','f_tel','f_email','f_dir','f_valor','f_recibo']
-    .forEach(i=>document.getElementById(i).value='');
+  ['f_rut','f_nombre','f_edad','f_id','f_tel','f_email','f_dir','f_valor','f_recibo','f_huella','f_comentario']
+    .forEach(i=>{const el=document.getElementById(i); if(el) el.value='';});
   document.getElementById('f_genero').value='';
   document.getElementById('f_plan').value='';
   document.getElementById('f_cond').value='-';
   document.getElementById('formMsg').textContent='';
+  if(typeof fpUpdateFormState==='function') fpUpdateFormState();
 }
 function guardarNuevo(){
   const g=id=>document.getElementById(id).value.trim();
@@ -1017,7 +1377,9 @@ function guardarNuevo(){
     estado:'ACTIVO', recibo:g('f_recibo'),
     valor:parseInt(valor)||0, tipoPago:g('f_pago'),
     genero:g('f_genero'), edad:parseInt(g('f_edad'))||null,
-    telefono:g('f_tel'), email:g('f_email'), direccion:g('f_dir')
+    telefono:g('f_tel'), email:g('f_email'), direccion:g('f_dir'),
+    huella:g('f_huella')||null,
+    comentario:g('f_comentario')||''
   };
   hydrate(rec); DB.push(rec); persist();
   toast('Cliente "'+nombre+'" guardado ✓');
@@ -1561,6 +1923,276 @@ function fillPlanFilters(){
   [...new Set(DB.map(r=>r.planN))].forEach(p=>{
     const o=document.createElement('option');o.value=o.textContent=p;sel.appendChild(o);});
 }
+
+/* ===== FILTROS TIPO EXCEL POR COLUMNA ===== */
+// Estado global: filtros activos por columna + orden
+// COL_FILTERS[col] = { mode:'values'|'range', values:Set, from:'YYYY-MM-DD', to:'YYYY-MM-DD' }
+const COL_FILTERS = {};
+let COL_SORT = null; // { col, dir:'asc'|'desc' }
+let CFP_CTX = null;  // contexto del popup abierto
+
+const COL_LABELS = {
+  nombre:'Nombre', rut:'RUT', genero:'Género', edad:'Edad',
+  planN:'Plan', tipoCliente:'Tipo', fechaInicioOk:'Inicio',
+  fechaTerminoOk:'Término', estadoCalc:'Estado', valor:'Valor', pagoN:'Pago'
+};
+
+function colGetValor(r, col){
+  let v = r[col];
+  if(v==null || v==='') return '';
+  return v;
+}
+function colFormat(v, type){
+  if(v===''||v==null) return '(vacío)';
+  if(type==='date') return fmtDate(v);
+  if(type==='num') return String(v);
+  return String(v);
+}
+
+// Aplica todos los filtros y orden activos a la base
+function aplicarFiltrosColumnas(filas){
+  let out = filas;
+  Object.entries(COL_FILTERS).forEach(([col,flt])=>{
+    if(!flt) return;
+    if(flt.mode==='values' && flt.values && flt.values.size>0){
+      out = out.filter(({r})=>{
+        const v = colGetValor(r, col);
+        return flt.values.has(String(v));
+      });
+    }
+    if(flt.mode==='range'){
+      out = out.filter(({r})=>{
+        const v = colGetValor(r, col);
+        if(!v) return false;
+        if(flt.from && v < flt.from) return false;
+        if(flt.to && v > flt.to) return false;
+        return true;
+      });
+    }
+  });
+  if(COL_SORT){
+    const {col,dir} = COL_SORT;
+    out = [...out].sort((a,b)=>{
+      const va=colGetValor(a.r,col), vb=colGetValor(b.r,col);
+      const isNum = typeof va==='number' || typeof vb==='number';
+      let c;
+      if(isNum) c = (Number(va)||0) - (Number(vb)||0);
+      else c = String(va).localeCompare(String(vb),'es');
+      return dir==='asc' ? c : -c;
+    });
+  }
+  return out;
+}
+
+function actualizarIndicadoresCol(){
+  // Marcar ▾ activo en columnas con filtro u orden
+  document.querySelectorAll('#histTable thead th[data-col]').forEach(th=>{
+    const col = th.dataset.col;
+    const arrow = th.querySelector('.col-flt');
+    if(!arrow) return;
+    const hasFlt = COL_FILTERS[col] && (
+      (COL_FILTERS[col].mode==='values' && COL_FILTERS[col].values && COL_FILTERS[col].values.size>0)
+      || (COL_FILTERS[col].mode==='range' && (COL_FILTERS[col].from || COL_FILTERS[col].to))
+    );
+    const isSort = COL_SORT && COL_SORT.col===col;
+    arrow.classList.toggle('active', !!(hasFlt||isSort));
+    arrow.textContent = isSort ? (COL_SORT.dir==='asc'?'↑':'↓') : '▾';
+  });
+  // Actualizar pills en la barra
+  const bar = document.getElementById('colFiltersBar');
+  const pills = [];
+  Object.entries(COL_FILTERS).forEach(([col,flt])=>{
+    if(!flt) return;
+    let txt='';
+    if(flt.mode==='values' && flt.values && flt.values.size>0){
+      const arr=[...flt.values];
+      txt = (COL_LABELS[col]||col)+': '+(arr.length<=2?arr.join(', '):arr.length+' valores');
+    } else if(flt.mode==='range'){
+      const f=flt.from||'—', t=flt.to||'—';
+      if(f==='—'&&t==='—') return;
+      txt = (COL_LABELS[col]||col)+': '+f+' → '+t;
+    } else return;
+    pills.push('<span class="cfb-pill" onclick="limpiarFiltroDeCol(\''+col+'\')" title="Quitar filtro">'+
+      txt+' <span class="x">×</span></span>');
+  });
+  if(COL_SORT){
+    pills.push('<span class="cfb-pill" onclick="quitarOrden()" title="Quitar orden">'+
+      (COL_SORT.dir==='asc'?'↑ ':'↓ ')+(COL_LABELS[COL_SORT.col]||COL_SORT.col)+
+      ' <span class="x">×</span></span>');
+  }
+  if(pills.length){
+    pills.push('<span class="cfb-clear-all" onclick="limpiarTodosLosFiltrosCol()">Limpiar todos</span>');
+  }
+  bar.innerHTML = pills.join('');
+}
+
+function abrirFiltroColumna(arrowEl, ev){
+  if(ev){ ev.stopPropagation(); }
+  const th = arrowEl.closest('th');
+  const col = th.dataset.col;
+  const type = th.dataset.type || 'text';
+  CFP_CTX = { col, type, th };
+  const pop = document.getElementById('colFiltPopup');
+  document.getElementById('cfpColLabel').textContent = COL_LABELS[col]||col;
+  // Mostrar/ocultar sección de rangos rápidos
+  document.getElementById('cfpDateQuick').style.display = (type==='date') ? '' : 'none';
+  document.getElementById('cfpSearch').value='';
+  // Cargar valores
+  poblarListaValores();
+  // Pre-poblar rango si es fecha
+  if(type==='date'){
+    const flt=COL_FILTERS[col]||{};
+    document.getElementById('cfpDateFrom').value = flt.from||'';
+    document.getElementById('cfpDateTo').value = flt.to||'';
+  }
+  // Posicionar bajo el header
+  pop.classList.add('show');
+  const rect = arrowEl.getBoundingClientRect();
+  const popW = 280;
+  let left = rect.left + window.scrollX - 10;
+  // Evitar que se salga por la derecha
+  if(left + popW > window.innerWidth - 10) left = window.innerWidth - popW - 10;
+  if(left < 8) left = 8;
+  pop.style.left = left+'px';
+  pop.style.top = (rect.bottom + window.scrollY + 4)+'px';
+}
+
+function poblarListaValores(){
+  if(!CFP_CTX) return;
+  const {col,type} = CFP_CTX;
+  // Universo de valores únicos (de TODA la DB, no de lo ya filtrado)
+  const valSet = new Map(); // valor -> conteo
+  DB.forEach(r=>{
+    const v = String(colGetValor(r,col));
+    valSet.set(v, (valSet.get(v)||0)+1);
+  });
+  const valores = [...valSet.keys()];
+  if(type==='date'){
+    valores.sort(); // fechas ISO ordenan bien como string
+  } else if(type==='num'){
+    valores.sort((a,b)=>(Number(a)||0)-(Number(b)||0));
+  } else {
+    valores.sort((a,b)=>a.localeCompare(b,'es'));
+  }
+  const fltActual = COL_FILTERS[col];
+  // Si no hay filtro previo, todos marcados; si hay, marcar solo los del set
+  const list = document.getElementById('cfpList');
+  list.innerHTML = valores.map(v=>{
+    const isChecked = !fltActual || fltActual.mode!=='values' || !fltActual.values || fltActual.values.has(v);
+    const display = colFormat(v, type) + ' <span style="color:var(--eco-muted);font-size:11px">('+valSet.get(v)+')</span>';
+    return '<label class="cfp-row"><input type="checkbox" value="'+v.replace(/"/g,'&quot;')+'"'+
+      (isChecked?' checked':'')+'> '+display+'</label>';
+  }).join('') || '<div class="cfp-empty">Sin valores</div>';
+  // Estado del check "todos"
+  const cb = document.getElementById('cfpAll');
+  cb.checked = !fltActual || fltActual.mode!=='values' || !fltActual.values || fltActual.values.size===valSet.size;
+}
+
+function filtrarListaValores(){
+  const q = document.getElementById('cfpSearch').value.toLowerCase();
+  document.querySelectorAll('#cfpList .cfp-row').forEach(row=>{
+    const txt = row.textContent.toLowerCase();
+    row.style.display = (q==='' || txt.includes(q)) ? '' : 'none';
+  });
+}
+
+function toggleAllValores(checked){
+  document.querySelectorAll('#cfpList .cfp-row:not([style*="display: none"]) input[type=checkbox]').forEach(cb=>{
+    cb.checked = checked;
+  });
+}
+
+function ordenarColumna(dir){
+  if(!CFP_CTX) return;
+  COL_SORT = { col: CFP_CTX.col, dir };
+  cerrarFiltroColumna();
+  renderHistTable();
+}
+function quitarOrden(){ COL_SORT=null; renderHistTable(); }
+
+function aplicarFiltroColumna(){
+  if(!CFP_CTX) return;
+  const {col,type} = CFP_CTX;
+  if(type==='date'){
+    const from = document.getElementById('cfpDateFrom').value;
+    const to = document.getElementById('cfpDateTo').value;
+    // Si hay rango: usar rango. Si no, usar valores marcados.
+    if(from || to){
+      COL_FILTERS[col] = { mode:'range', from:from||null, to:to||null };
+      cerrarFiltroColumna(); renderHistTable(); return;
+    }
+  }
+  // Modo valores
+  const checked = [...document.querySelectorAll('#cfpList input[type=checkbox]:checked')].map(cb=>cb.value);
+  const total = document.querySelectorAll('#cfpList input[type=checkbox]').length;
+  if(checked.length===0){ toast('Selecciona al menos un valor','err'); return; }
+  if(checked.length===total){
+    // Todo seleccionado = sin filtro
+    delete COL_FILTERS[col];
+  } else {
+    COL_FILTERS[col] = { mode:'values', values:new Set(checked) };
+  }
+  cerrarFiltroColumna();
+  renderHistTable();
+}
+
+function limpiarFiltroColumna(){
+  if(!CFP_CTX) return;
+  delete COL_FILTERS[CFP_CTX.col];
+  cerrarFiltroColumna();
+  renderHistTable();
+}
+
+function limpiarFiltroDeCol(col){
+  delete COL_FILTERS[col];
+  renderHistTable();
+}
+
+function limpiarTodosLosFiltrosCol(){
+  Object.keys(COL_FILTERS).forEach(k=>delete COL_FILTERS[k]);
+  COL_SORT = null;
+  renderHistTable();
+}
+
+function aplicarRangoFecha(tipo){
+  const hoy = new Date();
+  const y = hoy.getFullYear(), m = hoy.getMonth();
+  const fmt = d => d.toISOString().slice(0,10);
+  let from='', to='';
+  if(tipo==='hoy'){ from=to=fmt(hoy); }
+  else if(tipo==='semana'){
+    const dow = hoy.getDay()||7; // 1..7
+    const lun = new Date(hoy); lun.setDate(hoy.getDate()-(dow-1));
+    const dom = new Date(lun); dom.setDate(lun.getDate()+6);
+    from=fmt(lun); to=fmt(dom);
+  } else if(tipo==='mes'){
+    from = fmt(new Date(y,m,1));
+    to = fmt(new Date(y,m+1,0));
+  } else if(tipo==='mes-pasado'){
+    from = fmt(new Date(y,m-1,1));
+    to = fmt(new Date(y,m,0));
+  } else if(tipo==='anio'){
+    from = fmt(new Date(y,0,1));
+    to = fmt(new Date(y,11,31));
+  }
+  document.getElementById('cfpDateFrom').value=from;
+  document.getElementById('cfpDateTo').value=to;
+}
+
+function cerrarFiltroColumna(){
+  document.getElementById('colFiltPopup').classList.remove('show');
+  CFP_CTX = null;
+}
+
+// Cerrar popup al hacer clic fuera
+document.addEventListener('click', (e)=>{
+  const pop = document.getElementById('colFiltPopup');
+  if(!pop || !pop.classList.contains('show')) return;
+  if(pop.contains(e.target)) return;
+  if(e.target.classList && e.target.classList.contains('col-flt')) return;
+  cerrarFiltroColumna();
+});
+
 function renderHistTable(){
   const q=normTxt(document.getElementById('histSearch').value);
   const fp=document.getElementById('histPlan').value;
@@ -1570,33 +2202,40 @@ function renderHistTable(){
     (!q||normTxt(r.nombre).includes(q)||normTxt(r.rut).includes(q))&&
     (!fp||r.planN===fp)&&(!fe||r.estadoCalc===fe)&&
     (!fd||(fd==='incompletos'?r.incompleto:!r.incompleto)));
+  // Aplicar filtros por columna + orden
+  f = aplicarFiltrosColumnas(f);
   const incompl=DB.filter(r=>r.incompleto).length;
   document.getElementById('histCount').innerHTML=f.length+' de '+DB.length+
     ' &nbsp;·&nbsp; <span style="color:var(--warn)">'+incompl+' con datos faltantes</span>';
-  document.querySelector('#histTable tbody').innerHTML=f.slice(0,500).map(({r,idx},i)=>
-    '<tr><td>'+(i+1)+'</td><td>'+r.nombre+'</td><td>'+(r.rut||'<span style="color:var(--bad)">—</span>')+
-    '</td><td>'+(r.genero||'—')+'</td><td>'+(r.edad!=null?r.edad+(r.edadEst?'*':''):'—')+
-    '</td><td>'+r.planN+'</td><td>'+(r.tipoCliente||'—')+
-    '</td><td>'+fmtDate(r.fechaInicioOk)+'</td><td>'+fmtDate(r.fechaTerminoOk)+
-    '</td><td><span class="badge '+(r.estadoCalc==='ACTIVO'?'b-act':'b-ven')+'">'+
-    r.estadoCalc+'</span></td><td>'+fmtCLP(r.valor)+'</td><td>'+r.pagoN+
-    '</td><td>'+(r.incompleto?'<span class="badge b-warn" title="'+r.faltantes.join(', ')+'">'+
-      r.faltantes.length+' campos</span>':'<span class="badge b-act">OK</span>')+
-    '</td><td><button class="btn btn-ghost btn-sm" onclick="abrirEdit('+idx+')">✎ Editar</button></td></tr>'
-  ).join('')||'<tr><td colspan="14" style="text-align:center;color:var(--eco-muted)">Sin resultados</td></tr>';
+  document.querySelector('#histTable tbody').innerHTML=f.slice(0,500).map(({r,idx},i)=>{
+    const estCls = {ACTIVO:'b-act',VENCIDO:'b-ven',ANULADO:'b-anu',CONGELADO:'b-con',BLOQUEADO:'b-blo'}[r.estadoCalc]||'b-warn';
+    const estTitle = r.motivoEstado ? ' title="Motivo: '+String(r.motivoEstado).replace(/"/g,'&quot;')+(r.fechaEstado?' ('+r.fechaEstado+')':'')+'"' : '';
+    return '<tr><td>'+(i+1)+'</td><td>'+r.nombre+'</td><td>'+(r.rut||'<span style="color:var(--bad)">—</span>')+
+      '</td><td>'+(r.genero||'—')+'</td><td>'+(r.edad!=null?r.edad+(r.edadEst?'*':''):'—')+
+      '</td><td>'+r.planN+'</td><td>'+(r.tipoCliente||'—')+
+      '</td><td>'+fmtDate(r.fechaInicioOk)+'</td><td>'+fmtDate(r.fechaTerminoOk)+
+      '</td><td><span class="badge '+estCls+'"'+estTitle+'>'+r.estadoCalc+'</span></td><td>'+fmtCLP(r.valor)+'</td><td>'+r.pagoN+
+      '</td><td>'+(r.incompleto?'<span class="badge b-warn" title="'+r.faltantes.join(', ')+'">'+
+        r.faltantes.length+' campos</span>':'<span class="badge b-act">OK</span>')+
+      '</td><td><button class="btn btn-ghost btn-sm" onclick="abrirEdit('+idx+')">✎ Editar</button></td></tr>';
+  }).join('')||'<tr><td colspan="14" style="text-align:center;color:var(--eco-muted)">Sin resultados</td></tr>';
+  actualizarIndicadoresCol();
 }
 
 /* ===== MODAL EDICION ===== */
 let editIdx=-1;
 const EDIT_FIELDS=[
-  ['nombre','Nombre completo','text'],['rut','RUT','text'],
+  ['nombre','Nombre completo','text'],['rut','RUT','text-ro'],
   ['genero','Género','select-gen'],['edad','Edad','number'],
   ['telefono','Teléfono','text'],['email','Email','email'],
   ['direccion','Dirección','text'],['plan','Tipo de Plan','select-plan'],
+  ['condicion','Condición','text'],
   ['tipoCliente','Tipo de cliente','select-tipo'],
   ['fechaInicio','Fecha inicio','date'],['fechaTermino','Fecha término','date'],
   ['valor','Valor (CLP)','number'],['tipoPago','Tipo de pago','select-pago'],
-  ['recibo','N° recibo','text']
+  ['recibo','N° recibo','text'],
+  ['estado','Estado del socio','select-estado'],
+  ['comentario','Comentario / Nota interna','textarea']
 ];
 function abrirEdit(idx){
   editIdx=idx; const r=DB[idx];
@@ -1606,15 +2245,36 @@ function abrirEdit(idx){
     'select-gen':['','Femenino','Masculino','Otro / No especifica'],
     'select-plan':['','Mensual','Trimestral','Semestral','Anual','Personalizado','Mes gratis'],
     'select-tipo':['Nuevo','Renovacion','SIN DATA'],
-    'select-pago':['Efectivo','Transferencia','Tarjeta de Crédito/Debito','Mixto','Canje','Beca','Abono']
+    'select-pago':['Efectivo','Transferencia','Tarjeta de Crédito/Debito','Mixto','Canje','Beca','Abono'],
+    'select-estado':['ACTIVO','VENCIDO','ANULADO','CONGELADO','BLOQUEADO']
   };
   document.getElementById('editForm').innerHTML=EDIT_FIELDS.map(([k,lbl,typ])=>{
-    let v=r[k]; if(v==null)v='';
+    let v = (k==='estado') ? (r.estadoCalc||r.estado||'') : r[k];
+    if(v==null)v='';
     if(typ.startsWith('select-')){
       const list=opts[typ];
+      // Para estado, agregar tooltip con motivo si lo hay
+      const extraInfo = (k==='estado' && r.motivoEstado)
+        ? '<div class="hint" style="margin-top:4px;color:var(--eco-muted);font-size:12px">Motivo actual: <i>'+
+            String(r.motivoEstado).replace(/</g,'&lt;')+'</i>'+
+            (r.fechaEstado?' · '+r.fechaEstado:'')+'</div>'
+        : '';
       return '<div class="fld"><label>'+lbl+'</label><select id="ed_'+k+'">'+
         list.map(o=>'<option'+(String(o)===String(v)?' selected':'')+'>'+o+'</option>').join('')+
-        '</select></div>';
+        '</select>'+extraInfo+'</div>';
+    }
+    if(typ==='textarea'){
+      return '<div class="fld" style="grid-column:1/-1"><label>'+lbl+
+        ' <span class="hint" style="color:var(--eco-muted);font-weight:400">(opcional)</span></label>'+
+        '<textarea id="ed_'+k+'" rows="3" '+
+        'style="width:100%;padding:10px 12px;background:var(--eco-panel2);border:1px solid var(--eco-border);'+
+        'border-radius:8px;color:var(--eco-text);font-family:inherit;font-size:14.5px;resize:vertical;outline:none">'+
+        String(v).replace(/</g,'&lt;')+'</textarea></div>';
+    }
+    if(typ==='text-ro'){
+      return '<div class="fld"><label>'+lbl+' <span class="hint" style="color:var(--eco-muted);font-weight:400">(no editable)</span></label>'+
+        '<input id="ed_'+k+'" type="text" value="'+String(v).replace(/"/g,'&quot;')+'" readonly '+
+        'style="background:var(--eco-panel);color:var(--eco-muted);cursor:not-allowed"></div>';
     }
     return '<div class="fld"><label>'+lbl+'</label><input id="ed_'+k+'" type="'+typ+
       '" value="'+String(v).replace(/"/g,'&quot;')+'"></div>';
@@ -1625,29 +2285,66 @@ function cerrarEdit(){ document.getElementById('editModal').style.display='none'
 function pedirConfirmEdit(){
   if(editIdx<0) return;
   const r=DB[editIdx];
+  const MANUAL_ESTADOS = ['ANULADO','CONGELADO','BLOQUEADO'];
+
+  // 1) Comparar campos para mostrar resumen de cambios
   const cambios=[];
-  EDIT_FIELDS.forEach(([k])=>{
+  EDIT_FIELDS.forEach(([k,_,typ])=>{
+    if(typ==='text-ro') return; // RUT no se edita
     const el=document.getElementById('ed_'+k); if(!el) return;
     let nv=el.value.trim();
     if(k==='valor'||k==='edad') nv=nv===''?'':Number(nv);
-    let ov=r[k]==null?'':r[k];
+    // Para 'estado' comparar contra el calculado (que es lo que el usuario ve)
+    let ov = (k==='estado') ? (r.estadoCalc||r.estado||'') : (r[k]==null?'':r[k]);
     if(String(nv)!==String(ov)) cambios.push(k+': "'+ov+'" → "'+nv+'"');
   });
   if(!cambios.length){ toast('No hay cambios que guardar'); return; }
-  if(confirm('¿Confirmas guardar estos '+cambios.length+' cambio(s) para "'+r.nombre+'"?\\n\\n'+
-    cambios.join('\\n'))){
-    EDIT_FIELDS.forEach(([k])=>{
-      const el=document.getElementById('ed_'+k); if(!el) return;
-      let nv=el.value.trim();
-      if(k==='valor') nv=Number(nv)||0;
-      if(k==='edad') nv=nv===''?null:Number(nv);
-      r[k]=nv;
-    });
-    if(r.edad!=null) r.edadEst=false;
-    hydrate(r); persist();
-    cerrarEdit(); renderHistTable();
-    toast('Cambios guardados para "'+r.nombre+'" ✓');
+
+  // 2) Si el estado nuevo es manual (ANULADO/CONGELADO/BLOQUEADO), pedir motivo
+  const elEstado = document.getElementById('ed_estado');
+  const nuevoEstado = elEstado ? elEstado.value.trim() : '';
+  const estadoActual = r.estadoCalc || r.estado || '';
+  const estadoCambio = nuevoEstado && nuevoEstado!==estadoActual;
+  let motivoNuevo = null;
+  if(estadoCambio && MANUAL_ESTADOS.includes(nuevoEstado)){
+    const prefil = r.motivoEstado || '';
+    motivoNuevo = prompt(
+      'Estás cambiando el estado a "'+nuevoEstado+'".\n\nIngresa el motivo (obligatorio):',
+      prefil
+    );
+    if(motivoNuevo==null){ toast('Cambio cancelado'); return; }
+    motivoNuevo = motivoNuevo.trim();
+    if(!motivoNuevo){ toast('El motivo es obligatorio para este estado','err'); return; }
   }
+
+  // 3) Confirmar
+  if(!confirm('¿Confirmas guardar estos '+cambios.length+' cambio(s) para "'+r.nombre+'"?\\n\\n'+
+      cambios.join('\\n'))) return;
+
+  // 4) Aplicar
+  EDIT_FIELDS.forEach(([k,_,typ])=>{
+    if(typ==='text-ro') return;
+    const el=document.getElementById('ed_'+k); if(!el) return;
+    let nv=el.value.trim();
+    if(k==='valor') nv=Number(nv)||0;
+    if(k==='edad') nv=nv===''?null:Number(nv);
+    r[k]=nv;
+  });
+  // 5) Manejo del cambio de estado (motivo / fecha)
+  if(estadoCambio){
+    if(MANUAL_ESTADOS.includes(nuevoEstado)){
+      r.motivoEstado = motivoNuevo;
+      r.fechaEstado = new Date().toISOString().slice(0,10);
+    } else {
+      // Vuelve a ACTIVO/VENCIDO: limpiar motivo manual
+      r.motivoEstado = '';
+      r.fechaEstado = '';
+    }
+  }
+  if(r.edad!=null) r.edadEst=false;
+  hydrate(r); persist();
+  cerrarEdit(); renderHistTable();
+  toast('Cambios guardados para "'+r.nombre+'" ✓');
 }
 
 /* ===== EXPORT ===== */
@@ -1708,7 +2405,694 @@ function initApp(){
   loadDB(); updateCounters(); renderInicio(); refreshBackupState();
   setupNavDelegation();
 }
+/* ===========================================================
+   ============   MÓDULO HUELLERO + ACCESO   =================
+   DigitalPersona 4500 vía DigitalPersona Lite Client (WebSDK).
+   Falla con elegancia a modo SIMULACIÓN si el lector/SDK no
+   están disponibles, para que toda la lógica de la app funcione
+   igual y se pueda probar antes de instalar drivers.
+   =========================================================== */
+
+const FP_STORE_HUELLAS  = 'ecofitness_fp_huellas_v1';   // rut -> template
+const FP_STORE_ACCESOS  = 'ecofitness_fp_accesos_v1';   // array logs
+const FP_CHANNEL_NAME   = 'ecofitness_kiosko_bus';
+const FP_LITE_WS_URL    = 'wss://127.0.0.1:52181/get_connection';
+
+// Estado runtime
+let FP_MODE = 'sim';            // 'sim' | 'live' (Lite Client conectado)
+let FP_WS = null;
+let FP_LISTENING_KIOSK = false; // si el kiosko está escuchando huellas
+let FP_MODAL_MODE = null;       // 'register' | 'search'
+let FP_PENDING_TEMPLATE = null; // template recién capturado a confirmar
+let FP_BUS = null;
+
+/* ----- Persistencia local de huellas y accesos ----- */
+function fpLoadHuellas(){
+  try{ return JSON.parse(localStorage.getItem(FP_STORE_HUELLAS)||'{}'); }catch(_){ return {}; }
+}
+function fpSaveHuellas(obj){
+  try{ localStorage.setItem(FP_STORE_HUELLAS, JSON.stringify(obj)); }catch(_){}
+}
+function fpLoadAccesos(){
+  try{ return JSON.parse(localStorage.getItem(FP_STORE_ACCESOS)||'[]'); }catch(_){ return []; }
+}
+function fpSaveAccesos(arr){
+  try{ localStorage.setItem(FP_STORE_ACCESOS, JSON.stringify(arr)); }catch(_){}
+}
+
+/* ----- Hash simple de template (solo para identificar; NO criptográfico) ----- */
+function fpHashTemplate(t){
+  // FNV-1a 32-bit, suficiente para diferenciar registros locales
+  let h = 0x811c9dc5;
+  for(let i=0;i<t.length;i++){ h ^= t.charCodeAt(i); h = (h * 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8,'0');
+}
+
+/* ----- Inicialización: conecta al Lite Client si está disponible ----- */
+function fpInit(){
+  // Bus entre pestañas (operador <-> kiosko)
+  try{
+    FP_BUS = new BroadcastChannel(FP_CHANNEL_NAME);
+    FP_BUS.onmessage = ev => fpOnBusMessage(ev.data);
+  }catch(_){ FP_BUS = null; }
+
+  fpTryConnectLiteClient();
+  fpUpdateConnPill();
+
+  // Si estamos en modo kiosko, arrancar escucha y reloj
+  if(window.__KIOSK__){
+    fpStartKioskListening();
+    setInterval(fpKioskClock,1000); fpKioskClock();
+  }
+}
+
+function fpTryConnectLiteClient(){
+  // Intento "best-effort". DigitalPersona Lite Client expone WebSocket en wss://127.0.0.1:52181
+  // En esta versión hacemos una sonda; si el SDK no está, quedamos en modo simulación.
+  // (Para usar la lectura real se debe instalar el SDK de HID Global e incluir su JS.)
+  if(typeof WebApi !== 'undefined' || typeof Fingerprint !== 'undefined'){
+    FP_MODE = 'live';
+    return;
+  }
+  try{
+    const ws = new WebSocket(FP_LITE_WS_URL);
+    let resolved = false;
+    ws.onopen = () => { resolved = true; FP_MODE = 'live'; FP_WS = ws; fpUpdateConnPill(); };
+    ws.onerror = () => { if(!resolved){ FP_MODE = 'sim'; fpUpdateConnPill(); } };
+    setTimeout(()=>{ if(!resolved){ try{ws.close()}catch(_){}; FP_MODE='sim'; fpUpdateConnPill(); } }, 1800);
+  }catch(_){
+    FP_MODE = 'sim';
+  }
+}
+
+function fpUpdateConnPill(){
+  const pill = document.getElementById('fpConnPill');
+  if(!pill) return;
+  if(FP_MODE === 'live'){
+    pill.textContent = 'Huellero: ✓ conectado (DigitalPersona)';
+    pill.className = 'fp-status-pill ok';
+  }else{
+    pill.textContent = 'Huellero: modo simulación (sin SDK)';
+    pill.className = 'fp-status-pill sim';
+  }
+}
+
+/* ----- Bus inter-ventana ----- */
+function fpBroadcast(msg){
+  if(FP_BUS){ try{ FP_BUS.postMessage(msg); }catch(_){} }
+}
+function fpOnBusMessage(msg){
+  if(!msg||!msg.type) return;
+  if(msg.type==='acceso-registrado'){
+    // Refrescar paneles si están abiertos
+    if(document.getElementById('p-en-gimnasio') &&
+       document.getElementById('p-en-gimnasio').classList.contains('active')){
+      renderEnGimnasio();
+    }
+  }
+  if(msg.type==='db-actualizada' && window.__KIOSK__){
+    // El operador modificó la base; recargar
+    loadDB();
+  }
+}
+
+/* ============================================================
+   ============   MODAL: CAPTURA / BÚSQUEDA   ================
+   ============================================================ */
+
+function fpAbrirModal(modo){
+  // modo: 'register' (asociar a cliente nuevo/edición) | 'search' (autocompletar)
+  FP_MODAL_MODE = modo;
+  FP_PENDING_TEMPLATE = null;
+  const m = document.getElementById('fpModal');
+  m.classList.add('show');
+  document.getElementById('fpModalTitle').innerHTML =
+    modo==='search' ? 'Buscar por <b>Huella</b>' : 'Capturar <b>Huella</b>';
+  document.getElementById('fpModalSub').textContent =
+    modo==='search' ? 'Coloque el dedo del cliente para buscarlo' : 'Coloque el dedo a registrar';
+  document.getElementById('fpFoundCard').classList.remove('show');
+  document.getElementById('fpBtnConfirmar').style.display = 'none';
+  document.getElementById('fpBtnSimular').style.display = (FP_MODE==='sim' ? '' : 'none');
+  fpModalSetState('waiting','Esperando huella...','info','👆');
+  // Si está el lector live, inicia captura real
+  if(FP_MODE==='live'){ fpStartLiveCapture(); }
+}
+function fpCerrarModal(){
+  document.getElementById('fpModal').classList.remove('show');
+  fpStopLiveCapture();
+}
+function fpModalSetState(kind, msg, statusClass, icon){
+  const ic = document.getElementById('fpModalIcon');
+  const st = document.getElementById('fpModalStatus');
+  ic.className = 'fp-icon ' + (kind||'');
+  ic.textContent = icon || '👆';
+  st.className = 'fp-status ' + (statusClass||'info');
+  st.textContent = msg || '';
+}
+
+/* ----- Captura real (placeholder de integración con SDK) ----- */
+function fpStartLiveCapture(){
+  // Integración real con HID DigitalPersona Lite Client (resumen):
+  //  1) Cargar /sdk/scripts/websdk.client.bundle.min.js y /sdk/scripts/fingerprint.sdk.min.js
+  //  2) const reader = new Fingerprint.WebApi();
+  //  3) reader.onSamplesAcquired = (s) => onTemplateCapturado(s.samples);
+  //  4) reader.startAcquisition(Fingerprint.SampleFormat.PngImage);
+  // Aquí dejamos el "hook" listo:
+  if(typeof Fingerprint==='undefined'){
+    fpModalSetState('waiting','SDK no cargado · use modo simulación','err','⚠');
+    return;
+  }
+  try{
+    if(!window.__fpReader){ window.__fpReader = new Fingerprint.WebApi(); }
+    const r = window.__fpReader;
+    r.onSamplesAcquired = (s)=> fpOnTemplateCapturado( JSON.stringify(s.samples).slice(0,1024) );
+    r.startAcquisition(Fingerprint.SampleFormat.PngImage);
+  }catch(e){
+    fpModalSetState('waiting','Error iniciando lector: '+e.message,'err','⚠');
+  }
+}
+function fpStopLiveCapture(){
+  try{ if(window.__fpReader && window.__fpReader.stopAcquisition) window.__fpReader.stopAcquisition(); }catch(_){}
+}
+
+/* ----- Simulación: genera un template aleatorio pero estable por dedo ----- */
+function fpSimularCaptura(){
+  // En modo simulación, pedimos al operador el RUT al que pertenece la huella simulada
+  // Así el "template" siempre será el mismo para esa persona y permite probar el flujo completo.
+  const rut = prompt('🎲 Modo simulación\n\nIngrese el RUT del socio que está "marcando" la huella\n(en producción esto vendrá del lector automáticamente):');
+  if(!rut) return;
+  const tpl = 'SIM-' + rut.trim().toLowerCase().replace(/[^0-9k]/g,'');
+  fpOnTemplateCapturado(tpl);
+}
+
+/* ----- Handler común tras capturar template ----- */
+function fpOnTemplateCapturado(template){
+  FP_PENDING_TEMPLATE = template;
+  const hash = fpHashTemplate(template);
+  if(FP_MODAL_MODE==='register'){
+    fpModalSetState('ok','Huella capturada ✓','ok','✓');
+    document.getElementById('fpBtnConfirmar').style.display = '';
+    document.getElementById('fpBtnConfirmar').textContent = '✓ Asociar al formulario';
+    // Si ya está asignada a otra persona, avisar
+    const huellas = fpLoadHuellas();
+    const enc = Object.entries(huellas).find(([rut,t])=>fpHashTemplate(t)===hash);
+    if(enc){
+      const dup = DB.find(r=>r.rut===enc[0]);
+      fpModalSetState('err','Esta huella ya está asociada a '+(dup?dup.nombre:enc[0]),'err','⚠');
+      document.getElementById('fpBtnConfirmar').style.display='none';
+    }
+  }else if(FP_MODAL_MODE==='search'){
+    // Buscar coincidencia por hash
+    const huellas = fpLoadHuellas();
+    const enc = Object.entries(huellas).find(([rut,t])=>fpHashTemplate(t)===hash);
+    if(enc){
+      const rec = DB.find(r=>r.rut===enc[0]);
+      if(rec){
+        fpModalSetState('ok','Cliente encontrado ✓','ok','✓');
+        fpMostrarFichaEncontrada(rec);
+        document.getElementById('fpBtnConfirmar').style.display = '';
+        document.getElementById('fpBtnConfirmar').textContent = '✓ Cargar en formulario';
+        FP_PENDING_TEMPLATE = template;
+        document.getElementById('fpFoundCard').dataset.rut = rec.rut;
+      }else{
+        fpModalSetState('err','Huella registrada pero socio no encontrado en BD','err','⚠');
+      }
+    }else{
+      fpModalSetState('err','Huella no reconocida','err','✕');
+    }
+  }
+}
+
+function fpMostrarFichaEncontrada(rec){
+  document.getElementById('fpFoundName').textContent = rec.nombre;
+  document.getElementById('fpFoundRut').textContent = rec.rut;
+  document.getElementById('fpFoundPlan').textContent = rec.plan||'—';
+  document.getElementById('fpFoundEstado').textContent = rec.estado||'—';
+  document.getElementById('fpFoundVence').textContent = fmtDate(rec.fechaTermino);
+  document.getElementById('fpFoundCard').classList.add('show');
+}
+
+function fpConfirmarAccion(){
+  if(FP_MODAL_MODE==='register' && FP_PENDING_TEMPLATE){
+    // Guarda en el campo del formulario; se persistirá al guardar el socio
+    document.getElementById('f_huella').value = FP_PENDING_TEMPLATE;
+    fpUpdateFormState();
+    toast('Huella asociada al formulario ✓');
+    fpCerrarModal();
+  }else if(FP_MODAL_MODE==='search'){
+    const rut = document.getElementById('fpFoundCard').dataset.rut;
+    const rec = DB.find(r=>r.rut===rut);
+    if(rec){
+      fpRellenarFormulario(rec);
+      fpCerrarModal();
+      // Asegurar que estamos en la página de ingreso
+      const target = document.querySelector('.nav-sub a[data-page="cli-nuevo"]');
+      if(target) nav(target);
+      toast('Datos cargados — modifica lo que necesites y guarda como renovación');
+    }
+  }
+}
+
+function fpRellenarFormulario(rec){
+  const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.value = v||''; };
+  set('f_rut',rec.rut); set('f_nombre',rec.nombre);
+  set('f_genero',rec.genero); set('f_edad',rec.edad);
+  set('f_id',rec.id); set('f_tel',rec.telefono);
+  set('f_email',rec.email); set('f_dir',rec.direccion);
+  set('f_plan',rec.plan);
+  set('f_tipoCli','Renovacion');
+  set('f_fini', new Date().toISOString().slice(0,10));
+  set('f_valor',rec.valor);
+  set('f_pago',rec.tipoPago);
+  set('f_cond',rec.condicion);
+  set('f_huella',rec.huella||'');
+  set('f_comentario',rec.comentario||'');
+  autoFin();
+  fpUpdateFormState();
+}
+
+/* ----- Funciones expuestas al formulario ----- */
+function fpCapturarParaForm(){ fpAbrirModal('register'); }
+function fpBuscarPorHuella(){ fpAbrirModal('search'); }
+function fpLimpiarForm(){
+  document.getElementById('f_huella').value='';
+  fpUpdateFormState();
+}
+function fpUpdateFormState(){
+  const v = document.getElementById('f_huella').value;
+  const lbl = document.getElementById('fpFormState');
+  const btn = document.getElementById('fpFormClearBtn');
+  if(!lbl) return;
+  if(v){
+    lbl.textContent = '✓ Registrada · ID '+fpHashTemplate(v);
+    lbl.className = 'val has';
+    if(btn) btn.style.display = '';
+  }else{
+    lbl.textContent = '— No registrada';
+    lbl.className = 'val none';
+    if(btn) btn.style.display = 'none';
+  }
+}
+
+/* ============================================================
+   ==============   MODO KIOSKO (CLIENTE)   ==================
+   ============================================================ */
+
+function abrirKiosko(){
+  const url = location.pathname + '?modo=kiosko';
+  const w = window.open(url, 'ecofitness_kiosko', 'width=1280,height=800');
+  if(!w){ alert('El navegador bloqueó la nueva ventana. Habilita ventanas emergentes para este sitio.'); return; }
+  toast('Pantalla de acceso abierta · arrástrala al monitor del cliente y pulsa F11');
+}
+
+function fpStartKioskListening(){
+  FP_LISTENING_KIOSK = true;
+  fpKioskShowIdle();
+  // En vivo: el SDK estaría escuchando continuamente
+  if(FP_MODE==='live'){
+    // Loop continuo: cuando captura una huella -> fpKioskOnFinger(template)
+    if(typeof Fingerprint!=='undefined'){
+      try{
+        if(!window.__fpReader){ window.__fpReader = new Fingerprint.WebApi(); }
+        const r = window.__fpReader;
+        r.onSamplesAcquired = (s)=> fpKioskOnFinger( JSON.stringify(s.samples).slice(0,1024) );
+        r.startAcquisition(Fingerprint.SampleFormat.PngImage);
+      }catch(e){
+        document.getElementById('kMsg').textContent = 'Error lector: '+e.message;
+      }
+    }
+  }else{
+    // Modo simulación: al hacer click en el área grande, pedir RUT
+    document.getElementById('kState').onclick = ()=>{
+      const rut = prompt('🎲 Simulación · RUT del cliente que marca:');
+      if(rut) fpKioskOnFinger('SIM-'+rut.trim().toLowerCase().replace(/[^0-9k]/g,''));
+    };
+    document.getElementById('kMsg').textContent = 'Modo simulación · toque la pantalla para simular una marca';
+  }
+}
+
+function fpKioskClock(){
+  const d = new Date();
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  const ss = String(d.getSeconds()).padStart(2,'0');
+  const el = document.getElementById('kClock'); if(el) el.textContent = `${hh}:${mm}:${ss}`;
+}
+function fpKioskShowIdle(){
+  const k = document.getElementById('kiosko');
+  k.className = 'state-idle';
+  document.getElementById('kIcon').textContent = '👆';
+  document.getElementById('kTitle').textContent = 'APOYE SU HUELLA';
+  document.getElementById('kName').textContent = '';
+  document.getElementById('kPlan').textContent = '';
+  document.getElementById('kMsg').textContent = FP_MODE==='live'
+    ? 'Sistema listo · Coloque su dedo en el lector'
+    : 'Modo simulación · toque la pantalla para simular una marca';
+}
+function fpKioskOnFinger(template){
+  if(!FP_LISTENING_KIOSK) return;
+  const hash = fpHashTemplate(template);
+  const huellas = fpLoadHuellas();
+  const enc = Object.entries(huellas).find(([rut,t])=>fpHashTemplate(t)===hash);
+  if(!enc){
+    fpKioskShowResult('unknown', null, null);
+    setTimeout(fpKioskShowIdle, 4000);
+    return;
+  }
+  const rec = DB.find(r=>r.rut===enc[0]);
+  if(!rec){
+    fpKioskShowResult('unknown', null, null);
+    setTimeout(fpKioskShowIdle, 4000);
+    return;
+  }
+  // Chequear estados manuales primero — tienen prioridad
+  const est = (rec.estadoCalc||rec.estado||'').toUpperCase();
+  if(est==='BLOQUEADO'){
+    fpRegistrarIntento(rec, 'bloqueado');
+    fpKioskShowResult('blocked', rec, null);
+    setTimeout(fpKioskShowIdle, 5500);
+    return;
+  }
+  if(est==='ANULADO'){
+    fpRegistrarIntento(rec, 'anulado');
+    fpKioskShowResult('cancelled', rec, null);
+    setTimeout(fpKioskShowIdle, 5500);
+    return;
+  }
+  if(est==='CONGELADO'){
+    fpRegistrarIntento(rec, 'congelado');
+    fpKioskShowResult('frozen', rec, null);
+    setTimeout(fpKioskShowIdle, 5500);
+    return;
+  }
+  // Estado normal: ¿activo o vencido?
+  const activo = fpEsActivo(rec);
+  // Registrar acceso (toggle entrada/salida)
+  const ev = fpRegistrarAcceso(rec, activo);
+  fpKioskShowResult(activo ? (ev.tipo==='salida'?'out':'ok') : 'bad', rec, ev);
+  setTimeout(fpKioskShowIdle, 5500);
+}
+
+function fpEsActivo(rec){
+  if(!rec) return false;
+  const e = (rec.estadoCalc||rec.estado||'').toUpperCase();
+  if(['ANULADO','BLOQUEADO','CONGELADO'].includes(e)) return false;
+  if(e==='ACTIVO') return true;
+  // Fallback: vigente por fecha
+  const ft = rec.fechaTermino ? new Date(rec.fechaTermino) : null;
+  if(ft && !isNaN(ft) && ft >= new Date()) return true;
+  return false;
+}
+
+function fpKioskShowResult(state, rec, ev){
+  const k = document.getElementById('kiosko');
+  k.className = 'state-'+state;
+  const ic = document.getElementById('kIcon');
+  const tt = document.getElementById('kTitle');
+  const nm = document.getElementById('kName');
+  const ms = document.getElementById('kMsg');
+  const pl = document.getElementById('kPlan');
+  if(state==='ok'){
+    ic.textContent='✓'; tt.textContent='BIENVENIDO/A';
+    nm.textContent = rec.nombre;
+    ms.textContent = 'Acceso autorizado · Entrada registrada';
+    pl.innerHTML = 'Plan <b>'+(rec.plan||'—')+'</b> · Vence <b>'+fmtDate(rec.fechaTermino)+'</b>';
+  }else if(state==='out'){
+    ic.textContent='👋'; tt.textContent='HASTA PRONTO';
+    nm.textContent = rec.nombre;
+    const dur = ev && ev.duracionMin ? ev.duracionMin+' min' : '';
+    ms.textContent = 'Salida registrada' + (dur?' · Permanencia '+dur:'');
+    pl.textContent = '';
+  }else if(state==='bad'){
+    ic.textContent='✕'; tt.textContent='ACCESO DENEGADO';
+    nm.textContent = rec.nombre;
+    const dias = rec.fechaTermino ? Math.floor((new Date()-new Date(rec.fechaTermino))/864e5) : null;
+    ms.textContent = 'Plan vencido' + (dias!==null && dias>=0 ? ' hace '+dias+' día'+(dias!==1?'s':'') : '');
+    pl.innerHTML = 'Acércate a recepción para renovar · Vencido el <b>'+fmtDate(rec.fechaTermino)+'</b>';
+  }else if(state==='blocked'){
+    k.className='state-bad';
+    ic.textContent='🚫'; tt.textContent='ACCESO BLOQUEADO';
+    nm.textContent = rec.nombre;
+    ms.textContent = 'Tu cuenta está bloqueada';
+    pl.innerHTML = 'Acércate a recepción · '+(rec.motivoEstado||'Contacta al administrador');
+  }else if(state==='cancelled'){
+    k.className='state-bad';
+    ic.textContent='✕'; tt.textContent='PLAN ANULADO';
+    nm.textContent = rec.nombre;
+    ms.textContent = 'Tu plan fue anulado';
+    pl.innerHTML = 'Acércate a recepción para más información';
+  }else if(state==='frozen'){
+    k.className='state-unknown';
+    ic.textContent='⏸'; tt.textContent='PLAN CONGELADO';
+    nm.textContent = rec.nombre;
+    ms.textContent = 'Tu plan está pausado temporalmente';
+    pl.innerHTML = 'Acércate a recepción para reactivarlo';
+  }else{ // unknown
+    ic.textContent='?'; tt.textContent='HUELLA NO RECONOCIDA';
+    nm.textContent='';
+    ms.textContent = 'Acércate a recepción para registrar tu huella';
+    pl.textContent='';
+  }
+}
+
+/* ============================================================
+   ============   LOG DE ACCESOS   ===========================
+   ============================================================ */
+
+function fpHoyKey(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+// Registra intentos de acceso rechazados (sin contar como entrada al gimnasio)
+function fpRegistrarIntento(rec, motivo){
+  const log = fpLoadAccesos();
+  const hoy = fpHoyKey();
+  const ahora = new Date().toISOString();
+  const ev = {
+    tipo:'intento_rechazado', rut:rec.rut, nombre:rec.nombre,
+    plan:rec.plan, estado: (rec.estadoCalc||rec.estado||''),
+    motivoRechazo: motivo, fecha: hoy, ts: ahora,
+    salidaTs: null, duracionMin: null, activo: false
+  };
+  log.push(ev);
+  fpSaveAccesos(log);
+  fpBroadcast({type:'acceso-registrado', payload:ev});
+  return ev;
+}
+
+function fpRegistrarAcceso(rec, activo){
+  const log = fpLoadAccesos();
+  const hoy = fpHoyKey();
+  // Buscar entrada de hoy sin salida para este rut
+  const idxEnt = [...log].reverse().findIndex(a => a.rut===rec.rut && a.fecha===hoy && a.tipo==='entrada' && !a.salidaTs);
+  const ahora = new Date().toISOString();
+  if(idxEnt >= 0 && activo){
+    // Es una salida → cerrar entrada existente
+    const realIdx = log.length-1-idxEnt;
+    log[realIdx].salidaTs = ahora;
+    const dur = Math.round((new Date(ahora) - new Date(log[realIdx].ts))/60000);
+    log[realIdx].duracionMin = dur;
+    fpSaveAccesos(log);
+    const ev = {tipo:'salida', rut:rec.rut, nombre:rec.nombre, ts:ahora, duracionMin:dur};
+    fpBroadcast({type:'acceso-registrado', payload:ev});
+    return ev;
+  }
+  // Es una entrada (nueva o re-entrada tras salida)
+  const ev = {
+    tipo:'entrada', rut:rec.rut, nombre:rec.nombre,
+    plan:rec.plan, estado: activo?'ACTIVO':'VENCIDO',
+    fechaTermino: rec.fechaTermino,
+    fecha: hoy, ts: ahora, salidaTs: null, duracionMin: null,
+    activo: !!activo
+  };
+  log.push(ev);
+  fpSaveAccesos(log);
+  fpBroadcast({type:'acceso-registrado', payload:ev});
+  return ev;
+}
+
+/* ============================================================
+   ============   PÁGINA: EN EL GIMNASIO AHORA  ==============
+   ============================================================ */
+
+function fpEntradasActivasHoy(){
+  const log = fpLoadAccesos();
+  const hoy = fpHoyKey();
+  return log.filter(a => a.fecha===hoy && a.tipo==='entrada' && !a.salidaTs);
+}
+
+function renderEnGimnasio(){
+  fpUpdateConnPill();
+  const dentro = fpEntradasActivasHoy();
+  const warns = dentro.filter(a => !a.activo);
+  document.getElementById('gnTotal').textContent = dentro.length;
+  document.getElementById('gnWarn').textContent = warns.length;
+
+  // Permanencia promedio: sobre los que sí marcaron salida hoy
+  const log = fpLoadAccesos().filter(a=>a.fecha===fpHoyKey()&&a.duracionMin);
+  if(log.length){
+    const avg = Math.round(log.reduce((s,a)=>s+a.duracionMin,0)/log.length);
+    document.getElementById('gnAvg').textContent = avg+' min';
+  }else{
+    document.getElementById('gnAvg').textContent = '—';
+  }
+
+  const host = document.getElementById('gnTablaHost');
+  if(!dentro.length){
+    host.innerHTML = '<div class="gym-now-empty"><span class="ico">🏋️</span>'
+      +'Nadie ha marcado entrada hoy todavía.</div>';
+    return;
+  }
+  let html = '<table><thead><tr><th>Hora entrada</th><th>Nombre</th><th>RUT</th>'
+    +'<th>Plan</th><th>Estado</th><th>Tiempo dentro</th></tr></thead><tbody>';
+  const now = new Date();
+  dentro.forEach(a => {
+    const ts = new Date(a.ts);
+    const hh = String(ts.getHours()).padStart(2,'0')+':'+String(ts.getMinutes()).padStart(2,'0');
+    const mins = Math.round((now - ts)/60000);
+    const cls = a.activo ? '' : 'warn-row';
+    const badge = a.activo ? '<span class="badge ok">ACTIVO</span>'
+      : '<span class="badge bad">⚠ SIN PLAN ACTIVO</span>';
+    html += `<tr class="${cls}"><td>${hh}</td><td>${a.nombre}</td><td>${a.rut}</td>`
+      + `<td>${a.plan||'—'}</td><td>${badge}</td><td>${mins} min</td></tr>`;
+  });
+  html += '</tbody></table>';
+  host.innerHTML = html;
+}
+
+/* Refresco automático cada 30 s mientras la página esté visible */
+setInterval(()=>{
+  const p = document.getElementById('p-en-gimnasio');
+  if(p && p.classList.contains('active')) renderEnGimnasio();
+}, 30000);
+
+/* ============================================================
+   ============   PÁGINA: HISTORIAL DE ACCESOS  ==============
+   ============================================================ */
+
+function renderHistAccesos(){
+  const desde = document.getElementById('haDesde').value;
+  const hasta = document.getElementById('haHasta').value;
+  const q = (document.getElementById('haQ').value||'').toLowerCase();
+  let log = fpLoadAccesos();
+  if(desde) log = log.filter(a=>a.fecha>=desde);
+  if(hasta) log = log.filter(a=>a.fecha<=hasta);
+  if(q) log = log.filter(a => (a.nombre||'').toLowerCase().includes(q) || (a.rut||'').includes(q));
+  const host = document.getElementById('haTablaHost');
+  if(!log.length){
+    host.innerHTML = '<div class="gym-now-empty"><span class="ico">📋</span>No hay marcas con los filtros aplicados.</div>';
+    return;
+  }
+  let html = '<table><thead><tr><th>Fecha</th><th>Hora</th><th>Nombre</th><th>RUT</th>'
+    +'<th>Tipo</th><th>Plan</th><th>Estado</th><th>Permanencia</th></tr></thead><tbody>';
+  log.slice().reverse().forEach(a=>{
+    const ts = new Date(a.ts);
+    const hh = String(ts.getHours()).padStart(2,'0')+':'+String(ts.getMinutes()).padStart(2,'0');
+    const dur = a.duracionMin ? a.duracionMin+' min' : (a.tipo==='entrada'?'—':'');
+    const badge = a.activo===false ? '<span class="badge bad">⚠ VENCIDO</span>' : '<span class="badge ok">ACTIVO</span>';
+    html += `<tr><td>${a.fecha}</td><td>${hh}</td><td>${a.nombre}</td><td>${a.rut}</td>`
+      + `<td>${a.tipo}</td><td>${a.plan||'—'}</td><td>${badge}</td><td>${dur}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  host.innerHTML = html;
+}
+function exportarHistAccesos(){
+  const log = fpLoadAccesos();
+  if(!log.length){ toast('No hay marcas que exportar','err'); return; }
+  const rows = log.map(a=>({
+    Fecha:a.fecha, Hora:new Date(a.ts).toLocaleTimeString('es-CL'),
+    Nombre:a.nombre, RUT:a.rut, Tipo:a.tipo, Plan:a.plan||'',
+    Estado:a.activo===false?'VENCIDO':'ACTIVO',
+    'Permanencia (min)': a.duracionMin||''
+  }));
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, 'Accesos');
+  XLSX.writeFile(wb, 'ecofitness_accesos_'+fpHoyKey()+'.xlsx');
+}
+function limpiarHistAccesos(){
+  if(!confirm('¿Eliminar TODO el historial de accesos? Esta acción no se puede deshacer.')) return;
+  fpSaveAccesos([]); renderHistAccesos(); renderEnGimnasio();
+  toast('Historial limpiado');
+}
+
+/* ============================================================
+   ============   PERSISTENCIA DE HUELLAS EN ALTAS   =========
+   Cuando se guarda un cliente nuevo y trae huella, también
+   la indexamos en fp_huellas para que el kiosko la encuentre.
+   ============================================================ */
+(function hookGuardarNuevo(){
+  const orig = window.guardarNuevo;
+  if(typeof orig !== 'function') return;
+  window.guardarNuevo = function(){
+    const huella = (document.getElementById('f_huella')||{}).value || '';
+    const rut = (document.getElementById('f_rut')||{}).value.trim();
+    orig.apply(this, arguments);
+    if(huella && rut){
+      const all = fpLoadHuellas();
+      all[rut] = huella;
+      fpSaveHuellas(all);
+      fpBroadcast({type:'db-actualizada'});
+    }
+  };
+})();
+
+/* ============================================================
+   ============   NAV: enganchar páginas nuevas   ============
+   ============================================================ */
+(function moverPaginasAcceso(){
+  const host = document.getElementById('pages-acceso-host');
+  const main = document.getElementById('main');
+  if(host && main){
+    while(host.firstChild) main.appendChild(host.firstChild);
+    host.remove();
+  }
+})();
+
+/* Hook al nav existente para refrescar contenido al entrar */
+(function hookNav(){
+  const origNav = window.nav;
+  if(typeof origNav!=='function') return;
+  window.nav = function(el){
+    origNav(el);
+    const p = el && el.dataset ? el.dataset.page : null;
+    if(p==='en-gimnasio') renderEnGimnasio();
+    if(p==='hist-accesos') renderHistAccesos();
+  };
+})();
+
+/* ============================================================
+   ============   DETECCIÓN DE MODO KIOSKO   =================
+   ============================================================ */
+(function detectKiosko(){
+  const params = new URLSearchParams(location.search);
+  if(params.get('modo')==='kiosko'){
+    window.__KIOSK__ = true;
+    document.body.classList.add('kiosk-mode');
+  }
+})();
+
+/* Llamamos a fpInit cuando la app está lista (después de loadDB) */
+function fpBootstrap(){
+  // Si modo kiosko, saltar el login: mostrar kiosko y arrancar
+  if(window.__KIOSK__){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('kiosko').style.display='flex';
+    loadDB();
+    fpInit();
+    return;
+  }
+  fpInit();
+}
+
 loadDB();
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', fpBootstrap);
+}else{
+  fpBootstrap();
+}
 </script>
 </body>
 </html>
